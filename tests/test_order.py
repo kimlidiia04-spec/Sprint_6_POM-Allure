@@ -3,6 +3,7 @@ import pytest
 
 from pages.main_page import MainPage
 from pages.order_page import OrderPage
+from pages.main_page import MainPage, URL, DZEN_URL
 
 ORDER_TEST_DATA = [
     {
@@ -54,12 +55,7 @@ class TestOrder:
 
         order_page.fill_order_details(order_data["date"], order_data["comment"])
         order_page.select_rental_period(order_data["rental_period"])
-
-        if order_data["color"] == "black":
-            order_page.select_black_scooter()
-        else:
-            order_page.select_grey_scooter()
-
+        order_page.select_scooter_color(order_data["color"])
         order_page.click_order()
 
         order_page.confirm_order()
@@ -67,10 +63,21 @@ class TestOrder:
 
         order_page.click_view_status()
 
+    @allure.title("Переход на главную по логотипу «Самокат»")
+    def test_scooter_logo(self, driver):
+        main_page = MainPage(driver)
+        main_page.open_main_page()
+        main_page.confirm_cookies()
         main_page.click_scooter_logo()
-        assert main_page.current_url == "https://qa-scooter.praktikum-services.ru/", "Логотип «Самокат» должен вести на главную страницу"
+        assert main_page.current_url == URL, "Логотип «Самокат» должен вести на главную страницу"
 
+
+    @allure.title("Переход в Дзен по логотипу «Яндекса»")
+    def test_yandex_logo(self, driver):
+        main_page = MainPage(driver)
+        main_page.open_main_page()
+        main_page.confirm_cookies()
         windows_before = driver.window_handles
         main_page.click_yandex_logo()
         main_page.switch_to_new_window(windows_before)
-        assert "dzen.ru" in main_page.current_url, "Логотип Яндекса должен открыть главную страницу Дзена"
+        assert DZEN_URL in main_page.current_url, "Логотип Яндекса должен открыть главную страницу Дзена"

@@ -11,6 +11,7 @@ class OrderPage(BasePage):
     SURNAME_INPUT = (By.CSS_SELECTOR, 'input[placeholder="* Фамилия"]')
     ADDRESS_INPUT = (By.CSS_SELECTOR, 'input[placeholder="* Адрес: куда привезти заказ"]')
     METRO_INPUT = (By.CSS_SELECTOR, 'input[placeholder="* Станция метро"]')
+    METRO_OPTION = (By.XPATH, '//*[normalize-space()="{}"]')
     PHONE_INPUT = (By.CSS_SELECTOR, 'input[placeholder="* Телефон: на него позвонит курьер"]')
 
     NEXT_BUTTON = (By.XPATH, '//button[text()="Далее"]')
@@ -45,14 +46,22 @@ class OrderPage(BasePage):
         self.select_metro_station(metro)
         self.type_text(self.PHONE_INPUT, phone)
 
+    
+    def get_metro_option_locator(self, metro_station):
+        return (By.XPATH, self.METRO_OPTION[1].format(metro_station))
+
     @allure.step("Выбрать станцию метро")
     def select_metro_station(self, metro_station):
-        metro_option = (By.XPATH, f'//*[normalize-space()="{metro_station}"]')
-        self.click(metro_option)
+        self.click(self.get_metro_option_locator(metro_station))
 
     @allure.step("Перейти к следующему шагу оформления заказа")
     def click_next(self):
         self.click(self.NEXT_BUTTON)
+
+    @allure.step("Заполнить данные заказа")
+    def fill_order_details(self, delivery_date, comment):
+        self.select_delivery_date(delivery_date)
+        self.type_text(self.COMMENT_INPUT, comment)
 
     @allure.step("Выбрать дату доставки")
     def select_delivery_date(self, delivery_date):
@@ -61,23 +70,15 @@ class OrderPage(BasePage):
         date_option = (By.XPATH, f'//div[contains(@class, "react-datepicker__day") and normalize-space()="{day}"]')
         self.click(date_option)
 
-    @allure.step("Заполнить данные заказа")
-    def fill_order_details(self, delivery_date, comment):
-        self.select_delivery_date(delivery_date)
-        self.type_text(self.COMMENT_INPUT, comment)
-
     @allure.step("Выбрать срок аренды")
     def select_rental_period(self, rental_period):
         self.click(self.RENTAL_PERIOD)
         self.click(rental_period)
 
-    @allure.step("Выбрать чёрный самокат")
-    def select_black_scooter(self):
-        self.click(self.BLACK_SCOOTER_CHECKBOX)
-
-    @allure.step("Выбрать серый самокат")
-    def select_grey_scooter(self):
-        self.click(self.GREY_SCOOTER_CHECKBOX)
+    @allure.step("Выбрать цвет самоката")
+    def select_scooter_color(self, color):
+        color_locator = self.BLACK_SCOOTER_CHECKBOX if color == "black" else self.GREY_SCOOTER_CHECKBOX
+        self.click(color_locator)
 
     @allure.step("Нажать кнопку «Заказать»")
     def click_order(self):

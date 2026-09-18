@@ -5,6 +5,7 @@ from pages.base_page import BasePage
 from selenium.webdriver.support import expected_conditions as EC
 
 URL = "https://qa-scooter.praktikum-services.ru/"
+DZEN_URL = "dzen.ru"
 
 
 class MainPage(BasePage):
@@ -35,8 +36,8 @@ class MainPage(BasePage):
     ACCORDION_QUESTION_8 = (By.ID, "accordion__heading-7")
     ACCORDION_ANSWER_8 = (By.ID, "accordion__panel-7")
 
-    ORDER_BUTTON_TOP = (By.CSS_SELECTOR, '.Header_Nav__AGCXC .Button_Button__ra12g')
-    ORDER_BUTTON_BOTTOM = (By.CSS_SELECTOR, '.Button_Button__ra12g.Button_Middle__1CSJM')
+    ORDER_BUTTON_TOP = (By.CSS_SELECTOR, 'div[class*="Header_Nav"] button')
+    ORDER_BUTTON_BOTTOM = (By.CSS_SELECTOR, 'div[class*="Home_FinishButton"] button')
 
     SCOOTER_LOGO = (By.CSS_SELECTOR, '.Header_LogoScooter__3lsAR')
     YANDEX_LOGO = (By.CSS_SELECTOR, '.Header_LogoYandex__3TSOI')
