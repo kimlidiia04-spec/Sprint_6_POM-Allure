@@ -36,14 +36,14 @@ ORDER_TEST_DATA = [
 @allure.feature("Позитивный сценарий оформления заказа")
 class TestOrder:
 
-    @allure.description("Заполнение формы заказа валидными данными и проверка переходов по логотипам")
+    @allure.description("Заполнение формы заказа валидными данными и проверка успешного создания заказа")
     @allure.link("https://qa-scooter.praktikum-services.ru/", name="Сайт Яндекс Самокат")
     @pytest.mark.parametrize("entry_point_name, order_data",
     [("1. Оформление заказа через верхнюю кнопку Заказать", ORDER_TEST_DATA[0]),
      ("2. Оформление заказа через нижнюю кнопку Заказать", ORDER_TEST_DATA[1])])
     
+    @allure.title("Оформление заказа: {entry_point_name}")
     def test_positive_order(self, driver, entry_point_name, order_data):
-        allure.dynamic.title(entry_point_name)
         main_page = MainPage(driver)
         main_page.open_main_page()
         main_page.confirm_cookies()
